@@ -1,9 +1,33 @@
-# :rocket: rocksdb.swift
+# rocksdb.swift
 
-[![Build Status](https://travis-ci.com/Ybrin/rocksdb.swift.svg?branch=master)](https://travis-ci.com/Ybrin/rocksdb.swift)
-[![codecov](https://codecov.io/gh/Ybrin/rocksdb.swift/branch/master/graph/badge.svg)](https://codecov.io/gh/Ybrin/rocksdb.swift)
+This library provides Swift bindings for [rocksdb](https://rocksdb.org).
+Forked from [rocksdb.swift](https://github.com/koraykoska/rocksdb.swift),
+stripped down, and then updated to use rocksdb v8.1.1 and swift 5.9.
 
-This library provides Swift bindings for rocksdb as well as Swifty bindings.
+Per the fork source, uses the rocksdb `c.h` interface rather than swift c++
+interop. Playing with the latter, need to annotation the rocksdb source to
+smooth the integration as well as do work to avoid default copying of c++
+objects/types that swift does to make c++ objects 'safe' in swift context.
+The clang modulemaps and rocksdb code layout don't play together too well
+either so skipped on c++ interop for now. 
+
+## Building
+
+First do the below to generate `build_version.cc` needed by the build. It
+will generate and then remove the `unify.cc` file and as a side-effect,
+the `build_version.cc` is produced (Writing into the package directory
+from the swift package build is disallowed; pre-build steps via the likes
+of `swiftgen` are all about templates rather than running a simple make 
+TODO).
+```
+ cd Sources/librocksdb/upstream
+ make unity.cc && rm -f unity.cc
+```
+
+Now you can do your usual
+```
+swift build
+```
 
 ## Compatibility
 
